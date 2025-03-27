@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.Condition;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -16,17 +17,11 @@ public class LoginPage {
     private String passwordIcon = "//*[@id=\"tabpanel-login-4717594832\"]/form/div[2]/span";
     private String loginField = "//*[@id=\"field_email\"]";
     private String passwordField = "//*[@id=\"field_password\"]";
-    private String feed = "//*[@id=\"hook_Loader_5231597046\"]/div[1]/div[4]/div";
     private String errorNoLogin = "//*[@id=\"tabpanel-login-6577160363\"]/form/div[3]/div";
 
 
-
-    public void openPage() {
-        Selenide.open("/");
-    }
-
     private SelenideElement getIconObject(String xpath) {
-        SelenideElement icon = $(xpath);
+        SelenideElement icon = $(By.xpath(xpath));
         return icon;
     }
 
@@ -46,7 +41,7 @@ public class LoginPage {
     }
 
     public LoginPage checkEnterTitleText(String expectedText) {
-        getIconObject(enterIcon).shouldHave(Condition.exactText(expectedText));
+        getIconObject(enterIcon).shouldHave(Condition.exactValue(expectedText));
         return this;
     }
 
@@ -58,11 +53,6 @@ public class LoginPage {
 
     public LoginPage clickEnterButton() {
         getIconObject(enterIcon).click();
-        return this;
-    }
-
-    public LoginPage checkIsItFeed() {
-        getIconObject(feed).shouldBe(Condition.visible);
         return this;
     }
 
