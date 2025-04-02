@@ -11,13 +11,12 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
 
-
-    private String enterIcon = "//*[@id=\"tabpanel-login-4717594832\"]/form/div[4]/input";
-    private String loginIcon = "//*[@id=\"tabpanel-login-4717594832\"]/form/div[1]/span/label";
-    private String passwordIcon = "//*[@id=\"tabpanel-login-4717594832\"]/form/div[2]/span";
-    private String loginField = "//*[@id=\"field_email\"]";
-    private String passwordField = "//*[@id=\"field_password\"]";
-    private String errorNoLogin = "//*[@id=\"tabpanel-login-6577160363\"]/form/div[3]/div";
+    private String enterIcon = "//div/input[@class='button-pro __wide']";
+    private String loginIcon = "//div/span/label[@for='field_email']";
+    private String passwordIcon = "//div/span/label[@for='field_password']";
+    private String loginField = "//div/div/input[@name='st.email']";
+    private String passwordField = "//div/input[@name='st.password']";
+    private String errorNoLogin = "//div/div[@class='input-e login_error']";
 
 
     private SelenideElement getIconObject(String xpath) {

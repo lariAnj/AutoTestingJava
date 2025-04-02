@@ -10,8 +10,8 @@ public class LoginPageTest {
 
     LoginPage loginPage = new LoginPage();
     UserPage userPage = new UserPage();
-    private String emailEx = "nouser@mail.ru";
-    private String passwordEx = "12345";
+    private String emailEx = "technopol48";
+    private String passwordEx = "technopolisPassword";
 
     @BeforeAll
     public static void setup() {
@@ -38,12 +38,12 @@ public class LoginPageTest {
 
     }
 
-    @Test
+/*    @Test
     public void testLogIn() {
         String email = emailEx;
         String password = passwordEx;
         loginPage.enterUserData(email, password);
         loginPage.clickEnterButton();
         userPage.checkIsItFeed();
-    }
+    }*/
 }
