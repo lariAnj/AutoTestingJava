@@ -11,64 +11,57 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
 
-    private String enterIcon = "//div/input[@class='button-pro __wide']";
-    private String loginIcon = "//div/span/label[@for='field_email']";
-    private String passwordIcon = "//div/span/label[@for='field_password']";
-    private String loginField = "//div/div/input[@name='st.email']";
-    private String passwordField = "//div/input[@name='st.password']";
-    private String errorNoLogin = "//div/div[@class='input-e login_error']";
+    private By enterIcon = By.xpath("//div/input[@class='button-pro __wide']");
+    private By loginIcon = By.xpath("//div/span/label[@for='field_email']");
+    private By passwordIcon = By.xpath("//div/span/label[@for='field_password']");
+    private By loginField = By.xpath("//div/div/input[@name='st.email']");
+    private By passwordField = By.xpath("//div/input[@name='st.password']");
+    private By errorNoLogin = By.xpath("//div/div[@class='input-e login_error']");
 
+    public static String enterButtonText = "Войти в Одноклассники";
+    public static String emptyLoginErrorText = "Введите логин";
 
-    private SelenideElement getIconObject(String xpath) {
-        SelenideElement icon = $(By.xpath(xpath));
-        return icon;
-    }
 
     public LoginPage checkEnterIconIsVisible() {
-        getIconObject(enterIcon).shouldBe(Condition.visible);
+        $(enterIcon).shouldBe(Condition.visible.because("The enter to OK icon is not visible"));
         return this;
     }
 
     public LoginPage checkLoginIconIsVisible() {
-        getIconObject(loginIcon).shouldBe(Condition.visible);
+        $(loginIcon).shouldBe(Condition.visible.because("The login icon is not visible"));
         return this;
     }
 
     public LoginPage checkPasswordIconIsVisible() {
-        getIconObject(passwordIcon).shouldBe(Condition.visible);
+        $(passwordIcon).shouldBe(Condition.visible.because("The password icon is not visible"));
         return this;
     }
 
     public LoginPage checkEnterTitleText(String expectedText) {
-        getIconObject(enterIcon).shouldHave(Condition.exactValue(expectedText));
+        $(enterIcon).shouldHave(Condition.exactValue(expectedText).because("The text on enter button is not \"Войти в Одноклассники\""));
         return this;
     }
 
     public LoginPage enterUserData(String email, String password) {
-        getIconObject(loginField).setValue(email);
-        getIconObject(passwordField).setValue(password);
+        $(loginField).setValue(email);
+        $(passwordField).setValue(password);
         return this;
     }
 
     public LoginPage clickEnterButton() {
-        getIconObject(enterIcon).click();
+        $(enterIcon).click();
         return this;
     }
 
     public LoginPage enterEmptyLogin(String password) {
-        getIconObject(loginField).setValue("");
-        getIconObject(passwordField).setValue(password);
-        return this;
-    }
-
-    public LoginPage clickEnterButtonWithNoLogin() {
-        getIconObject(enterIcon).click();
+        $(loginField).setValue("");
+        $(passwordField).setValue(password);
         return this;
     }
 
     public LoginPage checkEmptyLoginError(String expectedError) {
-        getIconObject(errorNoLogin).shouldBe(Condition.visible);
-        getIconObject(errorNoLogin).shouldHave(Condition.text(expectedError));
+        $(errorNoLogin).shouldBe(Condition.visible.because("The message \"Enter login\" does not appear"));
+        $(errorNoLogin).shouldHave(Condition.text(expectedError).because("The message of no login error does not have expected text"));
         return this;
     }
 

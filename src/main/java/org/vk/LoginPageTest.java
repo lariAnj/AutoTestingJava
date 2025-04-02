@@ -2,48 +2,55 @@ package org.vk;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginPageTest {
 
-    LoginPage loginPage = new LoginPage();
-    UserPage userPage = new UserPage();
+//    LoginPage loginPage = new LoginPage();
+//    UserPage userPage = new UserPage();
     private String emailEx = "technopol48";
     private String passwordEx = "technopolisPassword";
 
-    @BeforeAll
-    public static void setup() {
+    @BeforeEach
+    public void setup() {
+        Selenide.closeWebDriver();
         Configuration.baseUrl = "https://ok.ru";
-        Configuration.timeout = 10000;
+        Configuration.timeout = 5000;
         Configuration.browser = "chrome";
         Selenide.open("/");
+//        Selenide.clearBrowserCookies();
+//        Selenide.clearBrowserLocalStorage();
     }
 
     @Test
-    public void userCanSeeIconsOnLoginPage() {
+    @Order(1)
+    public void testUserCanSeeIconsOnLoginPage() {
+        LoginPage loginPage = new LoginPage();
         loginPage.checkLoginIconIsVisible();
         loginPage.checkEnterIconIsVisible();
         loginPage.checkPasswordIconIsVisible();
-        loginPage.checkEnterTitleText("Войти в Одноклассники");
+        loginPage.checkEnterTitleText(LoginPage.enterButtonText);
     }
 
     @Test
+    @Order(3)
     public void testLoginWasNotEntered() {
-        String password = passwordEx;
-        loginPage.enterEmptyLogin(password);
-        loginPage.clickEnterButtonWithNoLogin();
-        loginPage.checkEmptyLoginError("Введите логин");
+        LoginPage loginPage = new LoginPage();
+        loginPage.enterEmptyLogin(passwordEx);
+        loginPage.clickEnterButton();
+        loginPage.checkEmptyLoginError(LoginPage.emptyLoginErrorText);
 
     }
 
-/*    @Test
+    @Test
+    @Order(2)
     public void testLogIn() {
-        String email = emailEx;
-        String password = passwordEx;
-        loginPage.enterUserData(email, password);
+        LoginPage loginPage = new LoginPage();
+        UserPage userPage = new UserPage();
+        loginPage.enterUserData(emailEx, passwordEx);
         loginPage.clickEnterButton();
         userPage.checkIsItFeed();
-    }*/
+    }
 }
