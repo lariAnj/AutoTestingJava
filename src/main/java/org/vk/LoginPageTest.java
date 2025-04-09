@@ -15,13 +15,13 @@ public class LoginPageTest {
 
     @BeforeEach
     public void setup() {
-        Selenide.closeWebDriver();
+//        Selenide.closeWebDriver();
         Configuration.baseUrl = "https://ok.ru";
         Configuration.timeout = 5000;
         Configuration.browser = "chrome";
         Selenide.open("/");
-//        Selenide.clearBrowserCookies();
-//        Selenide.clearBrowserLocalStorage();
+        Selenide.clearBrowserCookies();
+        Selenide.clearBrowserLocalStorage();
     }
 
     @Test
@@ -53,4 +53,5 @@ public class LoginPageTest {
         loginPage.clickEnterButton();
         userPage.checkIsItFeed();
     }
+
 }
