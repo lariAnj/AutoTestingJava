@@ -26,4 +26,7 @@ public interface MicroservicesNavigationToolbar {
     public UserPage checkToolbarIconClass(SelenideElement icon);
     public UserPage checkToolbarIconsclickability(SelenideElement icon);
 
+    public UserPage clickMessageIcon();
+    public UserPage clickNotificationIcon();
+
 }

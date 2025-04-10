@@ -91,6 +91,16 @@ public class UserPage implements MicroservicesNavigationToolbar{
         return this;
     }
 
+    public UserPage clickMessageIcon() {
+        $(MESSAGE_ICON).click();
+        return this;
+    }
+
+    public UserPage clickNotificationIcon() {
+        $(NOTIFICATIONS_ICON).click();
+        return this;
+    }
+
     public UserPage checkProfilePhotoDownloadedAndHasCorrectSize(String photoLink) {
         $(PROFILE_PHOTO_BLOCK).$("img").shouldBe(visible)
                 .shouldHave(attribute("src", photoLink))
@@ -104,6 +114,11 @@ public class UserPage implements MicroservicesNavigationToolbar{
         $(PROFILE_PHOTO_SOURCE_PAGE_LOCATOR).shouldBe(visible)
                 .$("img").shouldHave(attribute("src", photoLink));
         return this;
+    }
+
+    public NotificationsPage getNotifsPageFromUser() {
+        $(NOTIFICATIONS_ICON).click();
+        return new NotificationsPage();
     }
 
 }

@@ -3,6 +3,7 @@ package org.vk;
 import com.codeborne.selenide.*;
 import org.junit.jupiter.api.*;
 
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,6 +72,28 @@ public class UserPageTest {
         UserPage userPage = new UserPage();
         Stream<SelenideElement> allIconsStream = userPage.getStreamFromToolbarIcons();
         return allIconsStream.map(icon -> Arguments.of(icon, userPage, icon.getAttribute("data-l")));
+    }
+
+    @TestFactory
+    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    @DisplayName("Dynamic tests with different user actions with toolbar icons")
+    Stream<DynamicTest> testUserToolbarIconsActions() {
+        UserPage userPage = new UserPage();
+        MessagesPage messagesPage = new MessagesPage();
+        NotificationsPage notificationsPage = new NotificationsPage();
+        return Stream.of(
+                DynamicTest.dynamicTest("Click and check messages icon", () -> {
+                    userPage.clickMessageIcon();
+                    messagesPage.checkIsItMessagesPage();
+                    Selenide.back();
+                }),
+
+                DynamicTest.dynamicTest("Click and check notification icon", () -> {
+                    userPage.clickNotificationIcon();
+                    notificationsPage.checkIsItNotificationsPage();
+                    Selenide.back();
+                })
+        );
     }
 
     @Disabled("Test is disabled until profile photo wasn't downloaded.")

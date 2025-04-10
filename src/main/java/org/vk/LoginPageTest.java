@@ -18,8 +18,6 @@ public class LoginPageTest {
         Configuration.timeout = 5000;
         Configuration.browser = "chrome";
         Selenide.open("/");
-        Selenide.clearBrowserCookies();
-        Selenide.clearBrowserLocalStorage();
     }
 
     @DisplayName("Test to check elements visibility")
@@ -55,6 +53,12 @@ public class LoginPageTest {
         loginPage.enterUserData(emailEx, passwordEx);
         loginPage.clickEnterButton();
         userPage.checkIsItFeed();
+    }
+
+    @AfterEach
+    public void exit() {
+        Selenide.clearBrowserCookies();
+        Selenide.clearBrowserLocalStorage();
     }
 
 }
