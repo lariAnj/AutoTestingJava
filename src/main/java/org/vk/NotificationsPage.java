@@ -27,7 +27,8 @@ public class NotificationsPage {
     }
 
     public NotificationsPage checkNameHeaderVisibility() {
-        $(".notifs_header").$("#hook_Block_NotificationsLayerTitle").$(".portlet_h").$("h3.portlet_h_name_t").shouldHave(Condition.text("Подарки"));
+        $(".notifs_header").$("#hook_Block_NotificationsLayerTitle").$(".portlet_h").$("h3.portlet_h_name_t").shouldHave(Condition.text("Подарки")
+                .because("Gifts section header should display 'Подарки'"));
         return this;
     }
 
@@ -36,7 +37,8 @@ public class NotificationsPage {
     }
 
     public NotificationsPage checkNotifCloseButtonVisibility() {
-        $(CONCRETE_NOTIF_CLOSE_BUTTON).hover().shouldBe(Condition.clickable);
+        $(CONCRETE_NOTIF_CLOSE_BUTTON).hover().shouldBe(Condition.clickable
+                .because("Notification close button should be clickable"));
         return this;
     }
 

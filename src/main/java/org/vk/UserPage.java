@@ -23,17 +23,17 @@ public class UserPage implements MicroservicesNavigationToolbar{
 
 
     public UserPage checkIsItFeed() {
-        $(FEED).shouldBe(Condition.visible);
+        $(FEED).shouldBe(Condition.visible.because("News feed should be visible on user page"));
         return this;
     }
 
     public boolean checkUserNameVisibility() {
-        $(USER_NAME).shouldBe(visible);
+        $(USER_NAME).shouldBe(visible.because("Username should be displayed in profile header"));
         return true;
     }
 
     public boolean checkUserNameClickability() {
-        $(USER_NAME).shouldBe(clickable);
+        $(USER_NAME).shouldBe(clickable.because("Username should be clickable to open profile"));
         return true;
     }
 
@@ -43,13 +43,15 @@ public class UserPage implements MicroservicesNavigationToolbar{
     }
 
     public UserPage checkToolbarRowVisibility() {
-        ($(TOOLBAR_ROW)).shouldBe(visible);
+        ($(TOOLBAR_ROW)).shouldBe(visible.because("Toolbar row should be visible"));
         return this;
     }
 
     public UserPage checkToolbarRowSize() {
-        ($(TOOLBAR_ROW)).shouldHave(cssValue("width",toolbarRowWidth));
-        ($(TOOLBAR_ROW)).shouldHave(cssValue("height",toolbarRowHeight));
+        ($(TOOLBAR_ROW)).shouldHave(cssValue("width",toolbarRowWidth)
+                .because("Toolbar width should be " + toolbarRowWidth));
+        ($(TOOLBAR_ROW)).shouldHave(cssValue("height",toolbarRowHeight)
+                .because("Toolbar height should be " + toolbarRowHeight));
         return this;
     }
 
@@ -74,7 +76,7 @@ public class UserPage implements MicroservicesNavigationToolbar{
     }*/
 
     public UserPage checkToolbarIconVisibility(SelenideElement icon) {
-        icon.shouldBe(visible);
+        icon.shouldBe(visible.because("Toolbar icon should be visible to users"));
         return this;
     }
 
@@ -87,7 +89,7 @@ public class UserPage implements MicroservicesNavigationToolbar{
     }
 
     public UserPage checkToolbarIconsclickability(SelenideElement icon) {
-        icon.shouldBe(clickable);
+        icon.shouldBe(clickable.because("Toolbar icon should be clickable"));
         return this;
     }
 
@@ -102,10 +104,13 @@ public class UserPage implements MicroservicesNavigationToolbar{
     }
 
     public UserPage checkProfilePhotoDownloadedAndHasCorrectSize(String photoLink) {
-        $(PROFILE_PHOTO_BLOCK).$("img").shouldBe(visible)
-                .shouldHave(attribute("src", photoLink))
-                .shouldHave(cssValue("width", profilePhotoBlockWidth))
-                .shouldHave(cssValue("height", profilePhotoBlockHeight));
+        $(PROFILE_PHOTO_BLOCK).$("img").shouldBe(visible.because("Profile photo should load and be visible to users"))
+                .shouldHave(attribute("src", photoLink)
+                        .because("Profile photo should match expected URL: " + photoLink))
+                .shouldHave(cssValue("width", profilePhotoBlockWidth)
+                        .because("Profile photo width should be " + profilePhotoBlockWidth))
+                .shouldHave(cssValue("height", profilePhotoBlockHeight)
+                        .because("Profile photo height should be " + profilePhotoBlockHeight));
         return this;
     }
 

@@ -11,8 +11,8 @@ public class LoginPageTest {
     private String emailEx = "technopol48";
     private String passwordEx = "technopolisPassword";
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
 //        Selenide.closeWebDriver();
         Configuration.baseUrl = "https://ok.ru";
         Configuration.timeout = 5000;
