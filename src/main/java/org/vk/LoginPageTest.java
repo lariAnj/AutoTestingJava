@@ -5,11 +5,9 @@ import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
 
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Tag("LoginPage tests")
 public class LoginPageTest {
 
-//    LoginPage loginPage = new LoginPage();
-//    UserPage userPage = new UserPage();
     private String emailEx = "technopol48";
     private String passwordEx = "technopolisPassword";
 
@@ -24,8 +22,9 @@ public class LoginPageTest {
         Selenide.clearBrowserLocalStorage();
     }
 
+    @DisplayName("Test to check elements visibility")
+    @Tag("UI")
     @Test
-    @Order(1)
     public void testUserCanSeeIconsOnLoginPage() {
         LoginPage loginPage = new LoginPage();
         loginPage.checkLoginIconIsVisible();
@@ -35,7 +34,9 @@ public class LoginPageTest {
     }
 
     @Test
-    @Order(3)
+    @DisplayName("Test to check logging in with no login")
+    @Tag("functionality")
+    @Tag("log in")
     public void testLoginWasNotEntered() {
         LoginPage loginPage = new LoginPage();
         loginPage.enterEmptyLogin(passwordEx);
@@ -45,7 +46,9 @@ public class LoginPageTest {
     }
 
     @Test
-    @Order(2)
+    @DisplayName("Test to check logging in with correct data")
+    @Tag("functionality")
+    @Tag("log in")
     public void testLogIn() {
         LoginPage loginPage = new LoginPage();
         UserPage userPage = new UserPage();

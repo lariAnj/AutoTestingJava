@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 
 public interface MicroservicesNavigationToolbar {
 
-//    public By allToolbarIconsRowElement = By.xpath("//div/div[@class='topPanel' and @id='topPanel']");
     public final By TOOLBAR_ROW = By.xpath("//div/div/div[@class='toolbar_c' and @data-l='t,navigationToolbar']");
     public final By MESSAGE_ICON = By.xpath("//nav/ul/li[@data-l='t,messages']");
     public final By DISCUSSIONS_ICON = By.xpath("//nav/ul/li[@data-l='t,discussions']");
@@ -21,10 +20,10 @@ public interface MicroservicesNavigationToolbar {
     public String toolbarRowHeight = "48px";
 
 
-    public UserPage checkToolbarRowVisability();
+    public UserPage checkToolbarRowVisibility();
     public UserPage checkToolbarRowSize();
-//    public Stream<SelenideElement> getStreamFromToolbarIcons();
-    public UserPage checkToolbarIconVisability(SelenideElement icon);
+    public UserPage checkToolbarIconVisibility(SelenideElement icon);
     public UserPage checkToolbarIconClass(SelenideElement icon);
+    public UserPage checkToolbarIconsclickability(SelenideElement icon);
 
 }

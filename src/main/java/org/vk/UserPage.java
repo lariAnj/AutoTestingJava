@@ -3,25 +3,31 @@ package org.vk;
 import com.codeborne.selenide.*;
 import org.openqa.selenium.By;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.Duration;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class UserPage implements MicroservicesNavigationToolbar{
     private final By FEED = By.xpath("//div/div[@class='feed js-video-scope __header-redesign h-mod']");
     private final By USER_NAME = By.xpath("//div/a/div[@class='tico ellip']");
+//    private final By PROFILE_PHOTO_MENU = By.xpath("//div/div[@class='sc-menu lcTc_actions __l __left sc-menu__hidden']");
+    private final By PROFILE_PHOTO_BLOCK = By.xpath("//div/div[@class='card_wrp-dailyphoto-wrapper']");
+    private final By PROFILE_PHOTO_SOURCE_PAGE_LOCATOR = By.xpath("//div/div/div[@class='image-layer_img_w image-wrap__qsj1g']");
+
+    private String profilePhotoBlockWidth = "200px";
+    private String profilePhotoBlockHeight = "200px";
+
 
     public UserPage checkIsItFeed() {
         $(FEED).shouldBe(Condition.visible);
         return this;
     }
 
-    public boolean checkUserNameVisability() {
+    public boolean checkUserNameVisibility() {
         $(USER_NAME).shouldBe(visible);
         return true;
     }
@@ -36,7 +42,7 @@ public class UserPage implements MicroservicesNavigationToolbar{
         return name;
     }
 
-    public UserPage checkToolbarRowVisability() {
+    public UserPage checkToolbarRowVisibility() {
         ($(TOOLBAR_ROW)).shouldBe(visible);
         return this;
     }
@@ -46,22 +52,6 @@ public class UserPage implements MicroservicesNavigationToolbar{
         ($(TOOLBAR_ROW)).shouldHave(cssValue("height",toolbarRowHeight));
         return this;
     }
-
-/*    public ElementsCollection getAllIconsOnToolbar() {
-        ElementsCollection servicesIconsCollection = $("#topPanel").$$(".toolbar_nav_i");
-
-
-        //$$("#list li").filterBy(cssClass("enabled")).findBy(exactText("foo")).find(".remove").click();
-// вместо
-        //$(By.xpath("//*[@id='list']//li[@class='enabled' and .//text()='foo']//*[@class='remove']")).click()
-
-        servicesIconsCollection.forEach(element -> {
-            System.out.println(
-                    "Data-l: " + element.getAttribute("data-l")
-            );
-        });
-        return servicesIconsCollection;
-    }*/
 
     public Stream<SelenideElement> getStreamFromToolbarIcons() {
         Stream<SelenideElement> allIconsStream = Stream.of(
@@ -83,7 +73,7 @@ public class UserPage implements MicroservicesNavigationToolbar{
         return toolbarIconsInList;
     }*/
 
-    public UserPage checkToolbarIconVisability(SelenideElement icon) {
+    public UserPage checkToolbarIconVisibility(SelenideElement icon) {
         icon.shouldBe(visible);
         return this;
     }
@@ -93,6 +83,26 @@ public class UserPage implements MicroservicesNavigationToolbar{
                 el -> el.getAttribute("class").contains("toolbar_nav_i")
         ));*/
         icon.shouldHave(attributeMatching("class", ".*toolbar_nav_i.*"));
+        return this;
+    }
+
+    public UserPage checkToolbarIconsclickability(SelenideElement icon) {
+        icon.shouldBe(clickable);
+        return this;
+    }
+
+    public UserPage checkProfilePhotoDownloadedAndHasCorrectSize(String photoLink) {
+        $(PROFILE_PHOTO_BLOCK).$("img").shouldBe(visible)
+                .shouldHave(attribute("src", photoLink))
+                .shouldHave(cssValue("width", profilePhotoBlockWidth))
+                .shouldHave(cssValue("height", profilePhotoBlockHeight));
+        return this;
+    }
+
+    public UserPage checkProfilePhotoSwitching(String photoLink) {
+        $(PROFILE_PHOTO_BLOCK).click();
+        $(PROFILE_PHOTO_SOURCE_PAGE_LOCATOR).shouldBe(visible)
+                .$("img").shouldHave(attribute("src", photoLink));
         return this;
     }
 
