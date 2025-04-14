@@ -2,16 +2,16 @@ package org.vk;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
 public class LoginPageTest {
 
-    LoginPage loginPage = new LoginPage();
-    UserPage userPage = new UserPage();
-    private String emailEx = "nouser@mail.ru";
-    private String passwordEx = "12345";
+    private String emailEx = "technopol48";
+    private String passwordEx = "technopolisPassword";
 
     @BeforeAll
     public static void setup() {
@@ -22,7 +22,10 @@ public class LoginPageTest {
     }
 
     @Test
+    @DisplayName("Test to check elements visibility")
+    @Tag("UI")
     public void userCanSeeIconsOnLoginPage() {
+        LoginPage loginPage = new LoginPage();
         loginPage.checkLoginIconIsVisible();
         loginPage.checkEnterIconIsVisible();
         loginPage.checkPasswordIconIsVisible();
@@ -30,20 +33,33 @@ public class LoginPageTest {
     }
 
     @Test
+    @DisplayName("Test to check logging in with no login")
+    @Tag("functionality")
+    @Tag("log in")
     public void testLoginWasNotEntered() {
-        String password = passwordEx;
-        loginPage.enterEmptyLogin(password);
-        loginPage.clickEnterButtonWithNoLogin();
-        loginPage.checkEmptyLoginError("Введите логин");
+        LoginPage loginPage = new LoginPage();
+        loginPage.enterEmptyLogin(passwordEx);
+        loginPage.clickEnterButton();
+        loginPage.checkEmptyLoginError(LoginPage.emptyLoginErrorText);
 
     }
 
     @Test
+    @DisplayName("Test to check logging in with correct data")
+    @Tag("functionality")
+    @Tag("log in")
     public void testLogIn() {
-        String email = emailEx;
-        String password = passwordEx;
-        loginPage.enterUserData(email, password);
+        LoginPage loginPage = new LoginPage();
+        UserPage userPage = new UserPage();
+        loginPage.enterUserData(emailEx, passwordEx);
         loginPage.clickEnterButton();
         userPage.checkIsItFeed();
     }
+
+    @AfterEach
+    public void exit() {
+        Selenide.clearBrowserCookies();
+        Selenide.clearBrowserLocalStorage();
+    }
 }
+
