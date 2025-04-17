@@ -29,7 +29,7 @@ public class UserPageTest {
         Configuration.timeout = 5000;
         Configuration.browser = "chrome";
         Selenide.open("/");
-        LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage().get();
         loginPage.enterUserData(emailEx, passwordEx)
                 .clickEnterButton();
     }
@@ -43,7 +43,7 @@ public class UserPageTest {
     @DisplayName("Test to check are we on feed page")
     @Tag("location")
     public void testIsItFeedPage() {
-        UserPage userPage = new UserPage();
+        UserPage userPage = new UserPage().get();
         assertAll("Check user (feed) page: we should have user name and feed",
                 () -> assertEquals(userName, userPage.getUserName(), "User name isn't right"),
                 () -> assertTrue(userPage.checkUserNameVisibility(), "User name isn't visible"),
@@ -56,7 +56,7 @@ public class UserPageTest {
     @DisplayName("Test to check toolbar visibility")
     @Tag("UI")
     public void testToolbarRow() {
-        UserPage userPage = new UserPage();
+        UserPage userPage = new UserPage().get();
         assertAll(
                 () -> assertTrue(userPage.checkToolbarRowVisibility(), "Toolbar row isn't visible"),
                 () ->  assertTrue(userPage.checkToolbarRowSize(), "Tollbar row has invalid size")
@@ -76,7 +76,7 @@ public class UserPageTest {
     }
 
     private static Stream<Arguments> getToolbarIcons() {
-        UserPage userPage = new UserPage();
+        UserPage userPage = new UserPage().get();
         Stream<SelenideElement> allIconsStream = userPage.getStreamFromToolbarIcons();
         return allIconsStream.map(icon -> Arguments.of(icon, userPage));
     }
@@ -106,7 +106,7 @@ public class UserPageTest {
     @Tag("functionality")
     @Test
     public void testProfilePhoto() {
-        UserPage userPage = new UserPage();
+        UserPage userPage = new UserPage().get();
         assertAll(
                 () -> assertTrue(userPage.checkProfilePhotoDownloadedAndHasCorrectSize(profilePhotoLink), "Problem with profile photo displaying"),
                 () -> assertEquals(profilePhotoSourcePageLink, userPage.checkProfilePhotoSwitching())

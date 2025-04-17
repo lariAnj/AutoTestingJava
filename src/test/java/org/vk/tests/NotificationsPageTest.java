@@ -21,7 +21,7 @@ public class NotificationsPageTest {
         Configuration.timeout = 5000;
         Configuration.browser = "chrome";
         Selenide.open("/");
-        LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage().get();
         loginPage.enterUserData(emailEx, passwordEx)
                 .clickEnterButton();
     }
@@ -38,7 +38,7 @@ public class NotificationsPageTest {
         @BeforeEach
         public void getNotifsPage() {
             Selenide.open("/feed");
-            UserPage userPage = new UserPage();
+            UserPage userPage = new UserPage().get();
             //return new page
             notificationsPage = userPage.getNotifsPageFromUser()
                     .clickGiftSection();
@@ -50,7 +50,7 @@ public class NotificationsPageTest {
         public void testHeader() {
             assertEquals(NotificationsPage.giftsSectionHeader,
                     notificationsPage.checkNameHeaderVisibility(),
-                    "Header \"Подарки\" isn't visible");
+                    "Header isn't \"Подарки\"");
         }
 
         @Test

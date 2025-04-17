@@ -1,12 +1,13 @@
 package org.vk.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
 
 
-public class LoginPage {
+public class LoginPage extends LoadableComponent<LoginPage> {
 
     private final By ENTER_ICON = By.xpath(".//*[@class='button-pro __wide']");
     private final By LOGIN_ICON = By.xpath(".//*[@for='field_email']");
@@ -18,6 +19,17 @@ public class LoginPage {
     public static final String ENTER_BUTTON_TEXT = "Войти в Одноклассники";
     public static final String EMPTY_LOGIN_ERROR_TEXT = "Введите логин";
 
+    @Override
+    protected void load() {
+        Selenide.open("/");
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+        $(LOGIN_ICON).shouldBe(Condition.visible.because("The login field wasn't loaded"));
+        $(PASSWORD_ICON).shouldBe(Condition.visible.because("The password field wasn't loaded"));
+        $(ENTER_ICON).shouldBe(Condition.visible.because("The enter icon wasn't loaded"));
+    }
 
     public boolean checkEnterIconIsVisible() {
         return $(ENTER_ICON).is(Condition.visible.because("The enter to OK icon is not visible"));
@@ -36,13 +48,13 @@ public class LoginPage {
     }
 
     public LoginPage enterUserData(String email, String password) {
-        $(LOGIN_FIELD).setValue(email);
-        $(PASSWORD_FIELD).setValue(password);
+        $(LOGIN_FIELD).should(Condition.exist).setValue(email);
+        $(PASSWORD_FIELD).should(Condition.exist).setValue(password);
         return this;
     }
 
     public UserPage clickEnterButton() {
-        $(ENTER_ICON).click();
+        $(ENTER_ICON).should(Condition.clickable).click();
         return new UserPage();
     }
 

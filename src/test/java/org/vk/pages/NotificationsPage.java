@@ -1,13 +1,14 @@
 package org.vk.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.By;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class NotificationsPage {
+public class NotificationsPage extends LoadableComponent<NotificationsPage> {
 
     private final By NOTIFICATIONS_BLOCK = By.xpath(".//*[contains(@class, 'toolbar-layer __notifs')]");
     private final By GIFT_SECTION_MENU_NAME = By.xpath(".//*[@id='ntf_layer_menu_link_Presents']");
@@ -20,6 +21,16 @@ public class NotificationsPage {
     private final By CONCRETE_NOTIFICATION_BLOCK = By.cssSelector(".h-mod");
 
     public static String giftsSectionHeader = "Подарки";
+
+    @Override
+    protected void load() {
+        Selenide.open("/feed/notifications");
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+        $(NOTIFICATIONS_BLOCK).should(Condition.exist.because("Notifications page wasn't loaded"));
+    }
 
     public boolean checkIsItNotificationsPage() {
         return $(NOTIFICATIONS_BLOCK).is(Condition.exist.because("Notifications page wasn't been opened after clicking notification icon"), Duration.ofSeconds(5));
@@ -36,7 +47,7 @@ public class NotificationsPage {
                 .$(NOTIFICATIONS_TITLE_BLOCK)
                 .$(PORTLET_HEADER)
                 .$(PORTLET_NAME_TITLE)
-                .shouldBe(Condition.visible).getText();
+                .shouldBe(Condition.visible, Duration.ofSeconds(5)).getText();
     }
 
     public boolean checkConcreteNotifExists() {

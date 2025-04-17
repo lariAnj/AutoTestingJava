@@ -28,7 +28,7 @@ public class LoginPageTest {
     @Tag("UI")
     @Test
     public void testUserCanSeeIconsOnLoginPage() {
-        LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage().get();
         assertAll("Check elements on login page: user should see login, password, enter icon and text on enter button",
                 () -> assertTrue(loginPage.checkLoginIconIsVisible(), "Login icon isn't visible"),
                 () -> assertTrue(loginPage.checkEnterIconIsVisible(), "Enter icon isn't visible"),

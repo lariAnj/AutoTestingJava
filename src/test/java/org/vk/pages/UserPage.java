@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
-public class UserPage implements MicroservicesNavigationToolbar {
+public class UserPage extends LoadableComponent<UserPage> implements MicroservicesNavigationToolbar {
     private final By FEED = By.xpath(".//*[contains(@class,'feed-list')]");
     private final By USER_NAME = By.xpath(".//*[@data-l='t,userPage']/div[@class='tico ellip']");
     private final By PROFILE_PHOTO_BLOCK = By.xpath(".//*[@class='card_wrp-dailyphoto-wrapper']");
@@ -21,6 +21,15 @@ public class UserPage implements MicroservicesNavigationToolbar {
 
     private static final String USER_PAGE_URL = "/feed";
 
+    @Override
+    protected void load() {
+        Selenide.open("/feed");
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+        $(FEED).should(exist.because("The feed wasn't loaded"));
+    }
 
     public boolean checkIsItFeed() {
         return $(FEED).is(Condition.exist.because("News feed should exist on user page"));
