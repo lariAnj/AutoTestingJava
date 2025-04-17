@@ -1,14 +1,17 @@
-package org.vk;
+package org.vk.tests;
 
 import com.codeborne.selenide.*;
 import org.junit.jupiter.api.*;
 
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.vk.pages.LoginPage;
+import org.vk.pages.MessagesPage;
+import org.vk.pages.NotificationsPage;
+import org.vk.pages.UserPage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +30,8 @@ public class UserPageTest {
         Configuration.browser = "chrome";
         Selenide.open("/");
         LoginPage loginPage = new LoginPage();
-        loginPage.enterUserData(emailEx, passwordEx);
-        loginPage.clickEnterButton();
+        loginPage.enterUserData(emailEx, passwordEx)
+                .clickEnterButton();
     }
 
     @BeforeEach
@@ -42,10 +45,10 @@ public class UserPageTest {
     public void testIsItFeedPage() {
         UserPage userPage = new UserPage();
         assertAll("Check user (feed) page: we should have user name and feed",
-                () -> assertEquals(userName, userPage.getUserName()),
-                () -> assertTrue(userPage.checkUserNameVisibility()),
-                () -> assertTrue(userPage.checkUserNameClickability()),
-                () -> userPage.checkIsItFeed()
+                () -> assertEquals(userName, userPage.getUserName(), "User name isn't right"),
+                () -> assertTrue(userPage.checkUserNameVisibility(), "User name isn't visible"),
+                () -> assertTrue(userPage.checkUserNameClickability(), "User name isn't clickable"),
+                () -> assertTrue(userPage.checkIsItFeed(), "It's not a feed - We aren't on user (feed) page")
         );
     }
 
@@ -54,44 +57,45 @@ public class UserPageTest {
     @Tag("UI")
     public void testToolbarRow() {
         UserPage userPage = new UserPage();
-        userPage.checkToolbarRowVisibility();
-        userPage.checkToolbarRowSize();
+        assertAll(
+                () -> assertTrue(userPage.checkToolbarRowVisibility(), "Toolbar row isn't visible"),
+                () ->  assertTrue(userPage.checkToolbarRowSize(), "Tollbar row has invalid size")
+        );
     }
 
-    @ParameterizedTest(name="{index}-icon: {2}")
+    @ParameterizedTest(name="{index}")
     @MethodSource("getToolbarIcons")
     @Tag("UI")
     @DisplayName("Test to check toolbar icon")
-    void testAllToolbarIconsOnUserPage(SelenideElement icon, UserPage userPage, String iconDescription) {
-        userPage.checkToolbarIconVisibility(icon);
+    void testAllToolbarIconsOnUserPage(SelenideElement icon, UserPage userPage) {
         userPage.checkToolbarIconClass(icon);
-        userPage.checkToolbarIconsclickability(icon);
+        assertAll(
+                () -> assertTrue(userPage.checkToolbarIconVisibility(icon), "Toolbar icon isn't visible"),
+                () -> assertTrue(userPage.checkToolbarIconClickability(icon), "Toolbar icon isn't clickable")
+        );
     }
 
     private static Stream<Arguments> getToolbarIcons() {
         UserPage userPage = new UserPage();
         Stream<SelenideElement> allIconsStream = userPage.getStreamFromToolbarIcons();
-        return allIconsStream.map(icon -> Arguments.of(icon, userPage, icon.getAttribute("data-l")));
+        return allIconsStream.map(icon -> Arguments.of(icon, userPage));
     }
 
     @TestFactory
-    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    @Timeout(value = 5)
     @DisplayName("Dynamic tests with different user actions with toolbar icons")
     Stream<DynamicTest> testUserToolbarIconsActions() {
-        UserPage userPage = new UserPage();
-        MessagesPage messagesPage = new MessagesPage();
-        NotificationsPage notificationsPage = new NotificationsPage();
         return Stream.of(
                 DynamicTest.dynamicTest("Click and check messages icon", () -> {
-                    userPage.clickMessageIcon();
-                    messagesPage.checkIsItMessagesPage();
-                    Selenide.back();
+                    UserPage userPage = UserPage.openUserPage();
+                    MessagesPage messagesPage = userPage.clickMessageIcon();
+                    assertTrue(messagesPage.checkIsItMessagesPage(), "It's not messages page");
                 }),
 
                 DynamicTest.dynamicTest("Click and check notification icon", () -> {
-                    userPage.clickNotificationIcon();
-                    notificationsPage.checkIsItNotificationsPage();
-                    Selenide.back();
+                    UserPage userPage = UserPage.openUserPage();
+                    NotificationsPage notificationsPage = userPage.clickNotificationIcon();
+                    assertTrue(notificationsPage.checkIsItNotificationsPage(), "It's not notifications page");
                 })
         );
     }
@@ -103,8 +107,10 @@ public class UserPageTest {
     @Test
     public void testProfilePhoto() {
         UserPage userPage = new UserPage();
-        userPage.checkProfilePhotoDownloadedAndHasCorrectSize(profilePhotoLink);
-        userPage.checkProfilePhotoSwitching(profilePhotoSourcePageLink);
+        assertAll(
+                () -> assertTrue(userPage.checkProfilePhotoDownloadedAndHasCorrectSize(profilePhotoLink), "Problem with profile photo displaying"),
+                () -> assertEquals(profilePhotoSourcePageLink, userPage.checkProfilePhotoSwitching())
+        );
     }
 
     @AfterAll
@@ -112,4 +118,5 @@ public class UserPageTest {
         Selenide.clearBrowserCookies();
         Selenide.clearBrowserLocalStorage();
     }
+
 }

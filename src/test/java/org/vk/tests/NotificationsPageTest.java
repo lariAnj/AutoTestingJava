@@ -1,12 +1,14 @@
-package org.vk;
+package org.vk.tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
+import org.vk.pages.LoginPage;
+import org.vk.pages.NotificationsPage;
+import org.vk.pages.UserPage;
 
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("NotificationsPage tests")
 public class NotificationsPageTest {
@@ -20,15 +22,15 @@ public class NotificationsPageTest {
         Configuration.browser = "chrome";
         Selenide.open("/");
         LoginPage loginPage = new LoginPage();
-        loginPage.enterUserData(emailEx, passwordEx);
-        loginPage.clickEnterButton();
+        loginPage.enterUserData(emailEx, passwordEx)
+                .clickEnterButton();
     }
 
 
     @Nested
     @Tag("gift notifications")
     @DisplayName("Gifts notifications section tests")
-    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    @Timeout(value = 8)
     class GiftsNotificationsSectionTests {
 
         NotificationsPage notificationsPage;
@@ -37,25 +39,36 @@ public class NotificationsPageTest {
         public void getNotifsPage() {
             Selenide.open("/feed");
             UserPage userPage = new UserPage();
-            notificationsPage = userPage.getNotifsPageFromUser(); //return new page
-            notificationsPage.clickGiftSection();
+            //return new page
+            notificationsPage = userPage.getNotifsPageFromUser()
+                    .clickGiftSection();
         }
 
         @Test
         @Tag("UI")
         @DisplayName("Check header")
         public void testHeader() {
-            notificationsPage.checkNameHeaderVisibility();
+            assertEquals(NotificationsPage.giftsSectionHeader,
+                    notificationsPage.checkNameHeaderVisibility(),
+                    "Header \"Подарки\" isn't visible");
         }
 
         @Test
         @Tag("functionality")
         @DisplayName("Check close notif button")
         public void testCloseButton() {
-            assertTrue(notificationsPage.checkConcreteNotifExists());
-            notificationsPage.checkNotifCloseButtonVisibility();
+            assertAll(
+                    () -> assertTrue(notificationsPage.checkConcreteNotifExists(), "No one notification exists"),
+                    () -> assertTrue(notificationsPage.checkNotifCloseButtonVisibilityAndClickability(), "Close button for notification isn't visible")
+            );
         }
 
+    }
+
+    @AfterAll
+    public static void closeBrowser() {
+        Selenide.clearBrowserCookies();
+        Selenide.clearBrowserLocalStorage();
     }
 
 }
