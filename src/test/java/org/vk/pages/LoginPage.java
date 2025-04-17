@@ -3,6 +3,7 @@ package org.vk.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.By;
+import org.vk.TestBot;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -15,6 +16,7 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     private final By LOGIN_FIELD = By.xpath(".//*[@name='st.email']");
     private final By PASSWORD_FIELD = By.xpath(".//*[@name='st.password']");
     private final By ERROR_NO_LOGIN = By.xpath(".//*[@class='input-e login_error']");
+    private final By USER_PAGE_INDICATOR = By.xpath(".//*[contains(@class,'feed-list')]");
 
     public static final String ENTER_BUTTON_TEXT = "Войти в Одноклассники";
     public static final String EMPTY_LOGIN_ERROR_TEXT = "Введите логин";
@@ -53,9 +55,19 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         return this;
     }
 
-    public UserPage clickEnterButton() {
+    public LoginPage enterUserData(TestBot testBot) {
+        $(LOGIN_FIELD).should(Condition.exist).setValue(testBot.getLogin());
+        $(PASSWORD_FIELD).should(Condition.exist).setValue(testBot.getPassword());
+        return this;
+    }
+
+    public LoadableComponent<?> clickEnterButton() {
         $(ENTER_ICON).should(Condition.clickable).click();
-        return new UserPage();
+        if ($(USER_PAGE_INDICATOR).is(Condition.exist)) {
+            return new UserPage().get();
+        } else {
+            return this;
+        }
     }
 
     public String checkEmptyLoginError() {

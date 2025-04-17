@@ -37,7 +37,7 @@ public class UserPage extends LoadableComponent<UserPage> implements Microservic
 
     public static UserPage openUserPage() {
         Selenide.open(USER_PAGE_URL);
-        return new UserPage();
+        return new UserPage().get();
     }
 
     public boolean checkUserNameVisibility() {
@@ -98,12 +98,12 @@ public class UserPage extends LoadableComponent<UserPage> implements Microservic
 
     public MessagesPage clickMessageIcon() {
         $(MESSAGE_ICON).shouldBe(clickable).click();
-        return new MessagesPage();
+        return new MessagesPage().get();
     }
 
     public NotificationsPage clickNotificationIcon() {
-        $(NOTIFICATIONS_ICON).shouldBe(clickable).click();
-        return new NotificationsPage();
+        $(NOTIFICATIONS_ICON).shouldBe(clickable.because("Notifs icon should be clickable")).click();
+        return new NotificationsPage().get();
     }
 
     public boolean checkProfilePhotoDownloadedAndHasCorrectSize(String photoLink) {
@@ -129,7 +129,7 @@ public class UserPage extends LoadableComponent<UserPage> implements Microservic
 
     public NotificationsPage getNotifsPageFromUser() {
         $(NOTIFICATIONS_ICON).shouldBe(clickable.because("Notifs icon should be clickable")).click();
-        return new NotificationsPage();
+        return new NotificationsPage().get();
     }
 
 }

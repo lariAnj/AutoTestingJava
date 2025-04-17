@@ -11,7 +11,6 @@ public abstract class LoadableComponent<T extends LoadableComponent<T>> {
             isLoaded();
             return (T) this;
         } catch (Error e) {
-//            throw new RuntimeException("Failed to load component: " + e.getMessage(), e);
             System.err.println(("Error encountered during page load: " + e.getMessage()));
             load();
         }

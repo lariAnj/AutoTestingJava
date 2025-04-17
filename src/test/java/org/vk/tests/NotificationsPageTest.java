@@ -3,6 +3,7 @@ package org.vk.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
+import org.vk.TestBot;
 import org.vk.pages.LoginPage;
 import org.vk.pages.NotificationsPage;
 import org.vk.pages.UserPage;
@@ -12,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("NotificationsPage tests")
 public class NotificationsPageTest {
-    private static String emailEx = "technopol48";
-    private static String passwordEx = "technopolisPassword";
+
+    private static TestBot testBot = new TestBot("technopol48", "technopolisPassword");
 
     @BeforeAll
     public static void setup() {
@@ -22,7 +23,7 @@ public class NotificationsPageTest {
         Configuration.browser = "chrome";
         Selenide.open("/");
         LoginPage loginPage = new LoginPage().get();
-        loginPage.enterUserData(emailEx, passwordEx)
+        loginPage.enterUserData(testBot)
                 .clickEnterButton();
     }
 
