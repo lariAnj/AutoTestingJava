@@ -9,7 +9,9 @@ import java.util.stream.Stream;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
-public class UserPage implements MicroservicesNavigationToolbar {
+public class UserPage implements LoadableComponent {
+    public final MicroservicesNavigationToolbar toolbar;
+
     private final By FEED = By.xpath(".//*[contains(@class,'feed-list')]");
     private final By USER_NAME = By.xpath(".//*[@data-l='t,userPage']/div[@class='tico ellip']");
     private final By PROFILE_PHOTO_BLOCK = By.xpath(".//*[@class='card_wrp-dailyphoto-wrapper']");
@@ -21,15 +23,28 @@ public class UserPage implements MicroservicesNavigationToolbar {
 
     private static final String USER_PAGE_URL = "/feed";
 
+    public boolean isLoaded() throws Error {
+        if (!($(FEED).is(visible))) {
+            throw new Error("User page wasn't loaded properly");
+        }
+        else {
+            return true;
+        }
+    }
+
+    public UserPage() {
+        isLoaded();
+        this.toolbar = new MicroservicesNavigationToolbar();
+    }
 
     public boolean checkIsItFeed() {
-        return $(FEED).is(Condition.exist.because("News feed should exist on user page"));
+        return $(FEED).is(visible);
     }
 
-    public static UserPage openUserPage() {
+/*    public static UserPage openUserPage() {
         Selenide.open(USER_PAGE_URL);
         return new UserPage();
-    }
+    }*/
 
     public boolean checkUserNameVisibility() {
         return $(USER_NAME).is(visible.because("Username should be displayed in profile header"));
@@ -40,11 +55,10 @@ public class UserPage implements MicroservicesNavigationToolbar {
     }
 
     public String getUserName() {
-        String name = $(USER_NAME).text();
-        return name;
+        return $(USER_NAME).text();
     }
 
-    public boolean checkToolbarRowVisibility() {
+    /*public boolean checkToolbarRowVisibility() {
         return ($(TOOLBAR_ROW)).is(visible.because("Toolbar row should be visible"));
     }
 
@@ -85,9 +99,9 @@ public class UserPage implements MicroservicesNavigationToolbar {
 
     public boolean checkToolbarIconClickability(SelenideElement icon) {
         return icon.is(clickable.because("Toolbar icon should be clickable"));
-    }
+    }*/
 
-    public MessagesPage clickMessageIcon() {
+    /*public MessagesPage clickMessageIcon() {
         $(MESSAGE_ICON).shouldBe(clickable).click();
         return new MessagesPage();
     }
@@ -95,7 +109,7 @@ public class UserPage implements MicroservicesNavigationToolbar {
     public NotificationsPage clickNotificationIcon() {
         $(NOTIFICATIONS_ICON).shouldBe(clickable).click();
         return new NotificationsPage();
-    }
+    }*/
 
     public boolean checkProfilePhotoDownloadedAndHasCorrectSize(String photoLink) {
         try {
@@ -119,7 +133,7 @@ public class UserPage implements MicroservicesNavigationToolbar {
         }
 
     public NotificationsPage getNotifsPageFromUser() {
-        $(NOTIFICATIONS_ICON).shouldBe(clickable.because("Notifs icon should be clickable")).click();
+        $(toolbar.NOTIFICATIONS_ICON).shouldBe(clickable.because("Notifs icon should be clickable")).click();
         return new NotificationsPage();
     }
 

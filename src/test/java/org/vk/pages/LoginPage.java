@@ -1,12 +1,15 @@
 package org.vk.pages;
 
-import com.codeborne.selenide.Condition;
 import org.openqa.selenium.By;
 
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.clickable;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 
-public class LoginPage {
+public class LoginPage implements LoadableComponent {
 
     private final By ENTER_ICON = By.xpath(".//*[@class='button-pro __wide']");
     private final By LOGIN_ICON = By.xpath(".//*[@for='field_email']");
@@ -18,37 +21,52 @@ public class LoginPage {
     public static final String ENTER_BUTTON_TEXT = "Войти в Одноклассники";
     public static final String EMPTY_LOGIN_ERROR_TEXT = "Введите логин";
 
+    public boolean isLoaded() throws Error {
+        Duration timeout = Duration.ofSeconds(5);
+        if (!($(LOGIN_FIELD).is(visible, timeout) &&
+                $(PASSWORD_FIELD).is(visible, timeout) &&
+                $(ENTER_ICON).is(visible, timeout))) {
+            throw new Error("Login page wasn't loaded properly");
+        }
+        else {
+            return true;
+        }
+    }
+
+    public LoginPage() {
+        isLoaded();
+    }
 
     public boolean checkEnterIconIsVisible() {
-        return $(ENTER_ICON).is(Condition.visible.because("The enter to OK icon is not visible"));
+        return $(ENTER_ICON).is(visible);
     }
 
     public boolean checkLoginIconIsVisible() {
-        return $(LOGIN_ICON).is(Condition.visible.because("The login icon is not visible"));
+        return $(LOGIN_ICON).is(visible);
     }
 
     public boolean checkPasswordIconIsVisible() {
-        return $(PASSWORD_ICON).is(Condition.visible.because("The password icon is not visible"));
+        return $(PASSWORD_ICON).is(visible);
     }
 
     public String checkEnterTitleText() {
-        return $(ENTER_ICON).getValue();
+        return $(ENTER_ICON).shouldBe(visible.because("Enter icon isn't visible")).getValue();
     }
 
     public LoginPage enterUserData(String email, String password) {
-        $(LOGIN_FIELD).setValue(email);
-        $(PASSWORD_FIELD).setValue(password);
+        $(LOGIN_FIELD).should(visible).setValue(email);
+        $(PASSWORD_FIELD).should(visible).setValue(password);
         return this;
     }
 
-    public UserPage clickEnterButton() {
-        $(ENTER_ICON).click();
-        return new UserPage();
+    public LoggingPromise clickEnterButton() {
+        $(ENTER_ICON).shouldBe(clickable.because("Enter button isn't clickable")).click();
+        return new LoggingPromise(this);
     }
 
     public String checkEmptyLoginError() {
-        return $(ERROR_NO_LOGIN).shouldBe(Condition.visible.because("The message \"Enter login\" does not appear"))
+        return $(ERROR_NO_LOGIN).shouldBe(visible.because("The message \"Enter login\" does not appear"))
                 .getText();
-        }
+    }
 
 }

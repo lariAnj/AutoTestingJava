@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserPageTest {
     private static String emailEx = "technopol48";
     private static String passwordEx = "technopolisPassword";
+    private static String userPageRelUrl = "/feed";
     private String userName = "technopol48 technopol48";
     private String profilePhotoLink = "https://vki9.okcdn.ru/i?r=B1pAm_VFBkioSGBqh1Inn50X1kxoF36lMVmwm2eMKoc23ztLF9KnYgwobRIHmLoj_ZsnPPebiSaRi8Ts3YdZKolm-diC_SYlrhbZZG5YQSGlvW4EC43UVCOi7wAAACk";
     private String profilePhotoSourcePageLink = "https://vki9.okcdn.ru/i?r=B1JAm_VFBkioSGBqh1JaAbc1uHc0-JVPTgWdoY9dw0OuCTobmpKqzujxiYtteh05QWThAwUV3DtM-nO4bK1gJ-kOdvEB9krXEwcOwkMOBQtspFgAAAAp";
@@ -36,7 +37,7 @@ public class UserPageTest {
 
     @BeforeEach
     public void getUserFeedPage() {
-        Selenide.open("/feed");
+        Selenide.open(userPageRelUrl);
     }
 
     @Test
@@ -58,8 +59,8 @@ public class UserPageTest {
     public void testToolbarRow() {
         UserPage userPage = new UserPage();
         assertAll(
-                () -> assertTrue(userPage.checkToolbarRowVisibility(), "Toolbar row isn't visible"),
-                () ->  assertTrue(userPage.checkToolbarRowSize(), "Tollbar row has invalid size")
+                () -> assertTrue(userPage.toolbar.checkToolbarRowVisibility(), "Toolbar row isn't visible"),
+                () ->  assertTrue(userPage.toolbar.checkToolbarRowSize(), "Tollbar row has invalid size")
         );
     }
 
@@ -68,16 +69,16 @@ public class UserPageTest {
     @Tag("UI")
     @DisplayName("Test to check toolbar icon")
     void testAllToolbarIconsOnUserPage(SelenideElement icon, UserPage userPage) {
-        userPage.checkToolbarIconClass(icon);
+        userPage.toolbar.checkToolbarIconClass(icon);
         assertAll(
-                () -> assertTrue(userPage.checkToolbarIconVisibility(icon), "Toolbar icon isn't visible"),
-                () -> assertTrue(userPage.checkToolbarIconClickability(icon), "Toolbar icon isn't clickable")
+                () -> assertTrue(userPage.toolbar.checkToolbarIconVisibility(icon), "Toolbar icon isn't visible"),
+                () -> assertTrue(userPage.toolbar.checkToolbarIconClickability(icon), "Toolbar icon isn't clickable")
         );
     }
 
     private static Stream<Arguments> getToolbarIcons() {
         UserPage userPage = new UserPage();
-        Stream<SelenideElement> allIconsStream = userPage.getStreamFromToolbarIcons();
+        Stream<SelenideElement> allIconsStream = userPage.toolbar.getStreamFromToolbarIcons();
         return allIconsStream.map(icon -> Arguments.of(icon, userPage));
     }
 
@@ -87,14 +88,16 @@ public class UserPageTest {
     Stream<DynamicTest> testUserToolbarIconsActions() {
         return Stream.of(
                 DynamicTest.dynamicTest("Click and check messages icon", () -> {
-                    UserPage userPage = UserPage.openUserPage();
-                    MessagesPage messagesPage = userPage.clickMessageIcon();
+                    Selenide.open(userPageRelUrl);
+                    UserPage userPage = new UserPage();
+                    MessagesPage messagesPage = userPage.toolbar.clickMessageIcon();
                     assertTrue(messagesPage.checkIsItMessagesPage(), "It's not messages page");
                 }),
 
                 DynamicTest.dynamicTest("Click and check notification icon", () -> {
-                    UserPage userPage = UserPage.openUserPage();
-                    NotificationsPage notificationsPage = userPage.clickNotificationIcon();
+                    Selenide.open(userPageRelUrl);
+                    UserPage userPage = new UserPage();;
+                    NotificationsPage notificationsPage = userPage.toolbar.clickNotificationIcon();
                     assertTrue(notificationsPage.checkIsItNotificationsPage(), "It's not notifications page");
                 })
         );

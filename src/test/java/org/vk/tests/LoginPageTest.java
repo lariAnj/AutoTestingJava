@@ -43,9 +43,9 @@ public class LoginPageTest {
     @Tag("log in")
     public void testLoginWasNotEntered() {
         LoginPage loginPage = new LoginPage();
-        loginPage.enterUserData("", passwordEx)
-                .clickEnterButton();
-        assertEquals(LoginPage.EMPTY_LOGIN_ERROR_TEXT, loginPage.checkEmptyLoginError(), "Empty login error wasn't shown");
+        LoginPage promisePage = loginPage.enterUserData("", passwordEx)
+                .clickEnterButton().goToLoginPage();
+        assertEquals(LoginPage.EMPTY_LOGIN_ERROR_TEXT, promisePage.checkEmptyLoginError(), "Empty login error wasn't shown");
 
     }
 
@@ -55,9 +55,9 @@ public class LoginPageTest {
     @Tag("log in")
     public void testLogIn() {
         LoginPage loginPage = new LoginPage();
-        loginPage.enterUserData(emailEx, passwordEx);
-        UserPage userPage  = loginPage.clickEnterButton();
-        assertTrue(userPage.checkIsItFeed(), "It's not a feed - We aren't on user (feed) page");
+        UserPage promisePage = loginPage.enterUserData(emailEx, passwordEx)
+                .clickEnterButton().goToUserPage();
+        assertTrue(promisePage.checkIsItFeed(), "It's not a feed - We aren't on user (feed) page");
     }
 
     @AfterEach
@@ -65,6 +65,5 @@ public class LoginPageTest {
         Selenide.clearBrowserCookies();
         Selenide.clearBrowserLocalStorage();
     }
-
 
 }
