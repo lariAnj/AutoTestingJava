@@ -1,8 +1,13 @@
-package org.vk;
+package org.vk.tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
+import org.vk.pages.LoginPage;
+import org.vk.pages.UserPage;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @Tag("LoginPage tests")
@@ -11,9 +16,8 @@ public class LoginPageTest {
     private String emailEx = "technopol48";
     private String passwordEx = "technopolisPassword";
 
-    @BeforeAll
-    public static void setup() {
-//        Selenide.closeWebDriver();
+    @BeforeEach
+    public void setup() {
         Configuration.baseUrl = "https://ok.ru";
         Configuration.timeout = 5000;
         Configuration.browser = "chrome";
@@ -25,10 +29,12 @@ public class LoginPageTest {
     @Test
     public void testUserCanSeeIconsOnLoginPage() {
         LoginPage loginPage = new LoginPage();
-        loginPage.checkLoginIconIsVisible();
-        loginPage.checkEnterIconIsVisible();
-        loginPage.checkPasswordIconIsVisible();
-        loginPage.checkEnterTitleText(LoginPage.enterButtonText);
+        assertAll("Check elements on login page: user should see login, password, enter icon and text on enter button",
+                () -> assertTrue(loginPage.checkLoginIconIsVisible(), "Login icon isn't visible"),
+                () -> assertTrue(loginPage.checkEnterIconIsVisible(), "Enter icon isn't visible"),
+                () -> assertTrue(loginPage.checkPasswordIconIsVisible(), "Password icon isn't visible"),
+                () -> assertEquals(LoginPage.ENTER_BUTTON_TEXT, loginPage.checkEnterTitleText(),"Enter button has invalid text")
+        );
     }
 
     @Test
@@ -37,9 +43,9 @@ public class LoginPageTest {
     @Tag("log in")
     public void testLoginWasNotEntered() {
         LoginPage loginPage = new LoginPage();
-        loginPage.enterEmptyLogin(passwordEx);
-        loginPage.clickEnterButton();
-        loginPage.checkEmptyLoginError(LoginPage.emptyLoginErrorText);
+        loginPage.enterUserData("", passwordEx)
+                .clickEnterButton();
+        assertEquals(LoginPage.EMPTY_LOGIN_ERROR_TEXT, loginPage.checkEmptyLoginError(), "Empty login error wasn't shown");
 
     }
 
@@ -49,10 +55,9 @@ public class LoginPageTest {
     @Tag("log in")
     public void testLogIn() {
         LoginPage loginPage = new LoginPage();
-        UserPage userPage = new UserPage();
         loginPage.enterUserData(emailEx, passwordEx);
-        loginPage.clickEnterButton();
-        userPage.checkIsItFeed();
+        UserPage userPage  = loginPage.clickEnterButton();
+        assertTrue(userPage.checkIsItFeed(), "It's not a feed - We aren't on user (feed) page");
     }
 
     @AfterEach
@@ -60,5 +65,6 @@ public class LoginPageTest {
         Selenide.clearBrowserCookies();
         Selenide.clearBrowserLocalStorage();
     }
+
 
 }
