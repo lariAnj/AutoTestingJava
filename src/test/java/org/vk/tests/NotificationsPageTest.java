@@ -53,6 +53,7 @@ public class NotificationsPageTest {
                     "Header \"Подарки\" isn't visible");
         }
 
+        @Disabled("Test is disabled until at least 1 notification will appear.")
         @Test
         @Tag("functionality")
         @DisplayName("Check close notif button")

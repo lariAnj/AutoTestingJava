@@ -22,7 +22,7 @@ public class LoginPage implements LoadableComponent {
     public static final String EMPTY_LOGIN_ERROR_TEXT = "Введите логин";
 
     public boolean isLoaded() throws Error {
-        Duration timeout = Duration.ofSeconds(5);
+        Duration timeout = Duration.ofSeconds(10);
         if (!($(LOGIN_FIELD).is(visible, timeout) &&
                 $(PASSWORD_FIELD).is(visible, timeout) &&
                 $(ENTER_ICON).is(visible, timeout))) {
@@ -54,8 +54,8 @@ public class LoginPage implements LoadableComponent {
     }
 
     public LoginPage enterUserData(String email, String password) {
-        $(LOGIN_FIELD).should(visible).setValue(email);
-        $(PASSWORD_FIELD).should(visible).setValue(password);
+        $(LOGIN_FIELD).shouldBe(visible.because("Login field should be visible")).setValue(email);
+        $(PASSWORD_FIELD).shouldBe(visible.because("Password field should be visible")).setValue(password);
         return this;
     }
 

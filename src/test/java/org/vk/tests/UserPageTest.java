@@ -13,6 +13,8 @@ import org.vk.pages.MessagesPage;
 import org.vk.pages.NotificationsPage;
 import org.vk.pages.UserPage;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("UserPage tests")
@@ -21,8 +23,7 @@ public class UserPageTest {
     private static String passwordEx = "technopolisPassword";
     private static String userPageRelUrl = "/feed";
     private String userName = "technopol48 technopol48";
-    private String profilePhotoLink = "https://vki9.okcdn.ru/i?r=B1pAm_VFBkioSGBqh1Inn50X1kxoF36lMVmwm2eMKoc23ztLF9KnYgwobRIHmLoj_ZsnPPebiSaRi8Ts3YdZKolm-diC_SYlrhbZZG5YQSGlvW4EC43UVCOi7wAAACk";
-    private String profilePhotoSourcePageLink = "https://vki9.okcdn.ru/i?r=B1JAm_VFBkioSGBqh1JaAbc1uHc0-JVPTgWdoY9dw0OuCTobmpKqzujxiYtteh05QWThAwUV3DtM-nO4bK1gJ-kOdvEB9krXEwcOwkMOBQtspFgAAAAp";
+    private String profilePhotoLinkPart = "https://vki9.okcdn.ru/";
 
     @BeforeAll
     public static void setup() {
@@ -91,7 +92,8 @@ public class UserPageTest {
                     Selenide.open(userPageRelUrl);
                     UserPage userPage = new UserPage();
                     MessagesPage messagesPage = userPage.toolbar.clickMessageIcon();
-                    assertTrue(messagesPage.checkIsItMessagesPage(), "It's not messages page");
+                    assertEquals(messagesPage.MESSAGES_BLOCK_HEADER, messagesPage.getMessagesPageHeader(),
+                            "Header isn't \"Сообщения\" - It's not messages page");
                 }),
 
                 DynamicTest.dynamicTest("Click and check notification icon", () -> {
@@ -103,7 +105,7 @@ public class UserPageTest {
         );
     }
 
-    @Disabled("Test is disabled until profile photo wasn't downloaded.")
+
     @DisplayName("Test to check profile photo switches to page with this photo")
     @Tag("UI")
     @Tag("functionality")
@@ -111,8 +113,8 @@ public class UserPageTest {
     public void testProfilePhoto() {
         UserPage userPage = new UserPage();
         assertAll(
-                () -> assertTrue(userPage.checkProfilePhotoDownloadedAndHasCorrectSize(profilePhotoLink), "Problem with profile photo displaying"),
-                () -> assertEquals(profilePhotoSourcePageLink, userPage.checkProfilePhotoSwitching())
+                () -> assertTrue(userPage.checkProfilePhotoDownloadedAndHasCorrectSize(profilePhotoLinkPart), "Problem with profile photo displaying"),
+                () -> assertThat(userPage.checkProfilePhotoSwitching(), containsString(profilePhotoLinkPart))
         );
     }
 

@@ -2,7 +2,7 @@ package org.vk.pages;
 
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoggingPromise {
@@ -15,14 +15,14 @@ public class LoggingPromise {
     }
 
     public LoginPage goToLoginPage() {
-        if (!($(USER_PAGE_INDICATOR).is(exist))) {
+        if (!($(USER_PAGE_INDICATOR).is(visible))) {
             return curLoginPage;
         }
         throw new IllegalStateException("Expected LoginPage but got UserPage");
     }
 
     public UserPage goToUserPage() {
-        if ($(USER_PAGE_INDICATOR).is(exist)) {
+        if ($(USER_PAGE_INDICATOR).is(visible)) {
             return new UserPage();
         }
         throw new IllegalStateException("Expected UserPage but got LoginPage");
