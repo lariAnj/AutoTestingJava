@@ -26,6 +26,22 @@ public class NotificationsPageTest {
                 .clickEnterButton();
     }
 
+    @BeforeEach
+    public void getNotifsPage() {
+        Selenide.open("/notifications");
+    }
+
+    @Test
+    @Tag("functionality")
+    @DisplayName("Check close button for notifications window (block)")
+    public void checkNotifsWindowCloseButton() {
+        NotificationsPage notificationsPage = new NotificationsPage();
+        assertAll(
+                () -> assertTrue(notificationsPage.checkNotifsBlockCloseButtonClickabilityAndVisibility(), "Notifications window close button isn't clickable"),
+                () -> assertTrue(notificationsPage.checkNotifsBlockCloseButtonSize(), "Notifications window close button has incorrect size")
+        );
+    }
+
 
     @Nested
     @Tag("gift notifications")
@@ -37,27 +53,26 @@ public class NotificationsPageTest {
 
         @BeforeEach
         public void getNotifsPage() {
-            Selenide.open("/feed");
-            UserPage userPage = new UserPage();
-            //return new page
-            notificationsPage = userPage.getNotifsPageFromUser()
-                    .clickGiftSection();
+            notificationsPage = new NotificationsPage().clickGiftSection();
         }
 
         @Test
         @Tag("UI")
         @DisplayName("Check header")
         public void testHeader() {
-            assertEquals(NotificationsPage.giftsSectionHeader,
-                    notificationsPage.checkNameHeaderVisibility(),
-                    "Header \"Подарки\" isn't visible");
+            assertAll(
+                    () -> assertTrue(notificationsPage.checkGiftsIconActivation(), "Gifts icon isn't activated and colorized"),
+                    () -> assertEquals(NotificationsPage.giftsSectionHeader,
+                            notificationsPage.checkNameHeaderVisibility(),
+                            "Header \"Подарки\" isn't visible")
+            );
         }
 
         @Disabled("Test is disabled until at least 1 notification will appear.")
         @Test
         @Tag("functionality")
         @DisplayName("Check close notif button")
-        public void testCloseButton() {
+        public void testConcreteNotifCloseButton() {
             assertAll(
                     () -> assertTrue(notificationsPage.checkConcreteNotifExists(), "No one notification exists"),
                     () -> assertTrue(notificationsPage.checkNotifCloseButtonVisibilityAndClickability(), "Close button for notification isn't visible")

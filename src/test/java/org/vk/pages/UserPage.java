@@ -66,9 +66,4 @@ public class UserPage implements LoadableComponent {
                 .$(PHOTO_IMAGE).getAttribute("src");
         }
 
-    public NotificationsPage getNotifsPageFromUser() {
-        $(toolbar.NOTIFICATIONS_ICON).shouldBe(clickable.because("Notifs icon should be clickable")).click();
-        return new NotificationsPage();
-    }
-
 }
