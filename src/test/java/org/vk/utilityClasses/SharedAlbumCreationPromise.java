@@ -1,29 +1,33 @@
 package org.vk.utilityClasses;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.By;
-import org.vk.pages.LoadableComponent;
+import org.vk.pages.photosPages.ExistingSharedAlbumsPage;
+import org.vk.pages.photosPages.SharedAlbumsCreationPage;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.sleep;
 
-public class SharedAlbumCreationPromise extends LoadableComponent<SharedAlbumCreationPromise> {
+public class SharedAlbumCreationPromise {
 
     public final By CREATION_BLOCK = By.xpath(".//*[@class='photo-vitrine_stub_content']");
-    private String userID;
+    public final By CONCRETE_ALBUMS_RAW = By.xpath(".//*[contains(@id, 'PhotoVitrineAlbumsBlock')]");
 
-
-    public SharedAlbumCreationPromise(String userID) {
-        this.userID = userID;
+    public SharedAlbumsCreationPage goToSharedAlbumCreationPage() {
+        System.out.println("public SharedAlbumsCreationPage goToSharedAlbumCreationPage()");
+        sleep(3000);
+        if ($(CREATION_BLOCK).is(visible)) {
+            return new SharedAlbumsCreationPage();
+        }
+        throw new IllegalStateException("Expected SharedAlbums Creation page but got page with existing shared albums");
     }
 
-    @Override
-    protected void load() {
-        Selenide.open("/profile/" + userID + "/shared");
-    }
-
-    @Override
-    protected void isLoaded() throws Error {
-        $(CREATION_BLOCK).should(Condition.exist.because("The album creation block wasn't loaded"));
+    public ExistingSharedAlbumsPage goToExistingSharedAlbumsPage() {
+        System.out.println("public ExistingSharedAlbumsPage goToExistingSharedAlbumsPage()");
+        if ($(CONCRETE_ALBUMS_RAW).is(visible)) {
+            return new ExistingSharedAlbumsPage();
+        }
+        throw new IllegalStateException("Expected ExistingSharedAlbumsPage but got page for crating shared albums");
     }
 }
+

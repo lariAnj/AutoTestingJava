@@ -3,7 +3,6 @@ package org.vk.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
-import org.vk.TestBot;
 import org.vk.pages.LoginPage;
 import org.vk.pages.NotificationsPage;
 import org.vk.pages.UserPage;
@@ -13,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("NotificationsPage tests")
 public class NotificationsPageTest {
-
-    private static TestBot testBot = new TestBot("technopol48", "technopolisPassword");
+    private static String emailEx = "technopol48";
+    private static String passwordEx = "technopolisPassword";
 
     @BeforeAll
     public static void setup() {
@@ -22,9 +21,25 @@ public class NotificationsPageTest {
         Configuration.timeout = 5000;
         Configuration.browser = "chrome";
         Selenide.open("/");
-        LoginPage loginPage = new LoginPage().get();
-        loginPage.enterUserData(testBot)
+        LoginPage loginPage = new LoginPage();
+        loginPage.enterUserData(emailEx, passwordEx)
                 .clickEnterButton();
+    }
+
+    @BeforeEach
+    public void getNotifsPage() {
+        Selenide.open("/notifications");
+    }
+
+    @Test
+    @Tag("functionality")
+    @DisplayName("Check close button for notifications window (block)")
+    public void checkNotifsWindowCloseButton() {
+        NotificationsPage notificationsPage = new NotificationsPage();
+        assertAll(
+                () -> assertTrue(notificationsPage.checkNotifsBlockCloseButtonClickabilityAndVisibility(), "Notifications window close button isn't clickable"),
+                () -> assertTrue(notificationsPage.checkNotifsBlockCloseButtonSize(), "Notifications window close button has incorrect size")
+        );
     }
 
 
@@ -38,26 +53,26 @@ public class NotificationsPageTest {
 
         @BeforeEach
         public void getNotifsPage() {
-            Selenide.open("/feed");
-            UserPage userPage = new UserPage().get();
-            //return new page
-            notificationsPage = userPage.getNotifsPageFromUser()
-                    .clickGiftSection();
+            notificationsPage = new NotificationsPage().clickGiftSection();
         }
 
         @Test
         @Tag("UI")
         @DisplayName("Check header")
         public void testHeader() {
-            assertEquals(NotificationsPage.giftsSectionHeader,
-                    notificationsPage.checkNameHeaderVisibility(),
-                    "Header isn't \"Подарки\"");
+            assertAll(
+                    () -> assertTrue(notificationsPage.checkGiftsIconActivation(), "Gifts icon isn't activated and colorized"),
+                    () -> assertEquals(NotificationsPage.giftsSectionHeader,
+                            notificationsPage.checkNameHeaderVisibility(),
+                            "Header \"Подарки\" isn't visible")
+            );
         }
 
+        @Disabled("Test is disabled until at least 1 notification will appear.")
         @Test
         @Tag("functionality")
         @DisplayName("Check close notif button")
-        public void testCloseButton() {
+        public void testConcreteNotifCloseButton() {
             assertAll(
                     () -> assertTrue(notificationsPage.checkConcreteNotifExists(), "No one notification exists"),
                     () -> assertTrue(notificationsPage.checkNotifCloseButtonVisibilityAndClickability(), "Close button for notification isn't visible")
