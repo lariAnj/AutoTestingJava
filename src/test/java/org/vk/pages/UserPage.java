@@ -22,6 +22,6 @@ public class UserPage implements LoadableComponent {
     }
 
     public boolean checkIsItFeed() {
-        return $(FEED).is(visible.because("News feed should exist on user page"));
+        return $(FEED).is(visible);
     }
 }

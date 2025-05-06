@@ -61,7 +61,7 @@ public class LoginPage implements LoadableComponent {
 
     public LoggingPromise clickEnterButton() {
         $(ENTER_ICON).shouldBe(clickable.because("Enter button isn't clickable")).click();
-        return new LoggingPromise();
+        return new LoggingPromise(this);
     }
 
     public String checkEmptyLoginError() {
