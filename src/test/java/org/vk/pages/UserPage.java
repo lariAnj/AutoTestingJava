@@ -9,7 +9,7 @@ import java.util.Objects;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
-public class UserPage implements LoadableComponent {
+public class UserPage extends MicroservicesNavigationToolbar implements LoadableComponent {
     public final MicroservicesNavigationToolbar toolbar;
 
     private final By FEED = By.xpath(".//*[contains(@class,'feed-list')]");
