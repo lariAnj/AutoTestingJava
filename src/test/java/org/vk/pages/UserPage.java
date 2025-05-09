@@ -2,7 +2,7 @@ package org.vk.pages;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.vk.wrapers.MicroservicesNavigationToolbar;
+import org.vk.wrappers.MicroservicesNavigationToolbar;
 
 import java.util.Objects;
 

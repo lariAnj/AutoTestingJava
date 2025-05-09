@@ -1,4 +1,4 @@
-package org.vk.wrapers;
+package org.vk.wrappers;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
