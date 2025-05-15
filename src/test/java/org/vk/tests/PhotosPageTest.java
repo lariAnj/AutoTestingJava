@@ -36,7 +36,7 @@ public class PhotosPageTest {
     }
 
     @Test
-    @DisplayName("Test to check SharedAlbumsTab")
+    @DisplayName("Test to check SharedAlbumsTab with created albums")
     @Tag("functionality")
     public void testSharedAlbumsTab() {
         PhotosPage photosPage = (PhotosPage) new PhotosPage();

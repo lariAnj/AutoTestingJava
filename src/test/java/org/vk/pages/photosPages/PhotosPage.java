@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class PhotosPage extends AllPhotosTab {
     public final By ALL_PHOTOS_TAB = By.xpath(".//*[@data-l='t,albums']");
     public final By ALBUMS_TAB = By.xpath(".//*[@data-l='t,albums_new']");
-    public final By SHARED_ALBUMS_TAB = By.xpath(".//*[@data-l='t,shared-albums']");
+    public static final By SHARED_ALBUMS_TAB = By.xpath(".//*[@data-l='t,shared-albums']");
 
     public AllPhotosTab openAllPhotosTab() {
         $(ALL_PHOTOS_TAB).shouldBe(clickable.because("All photos tab isn't clickable")).click();

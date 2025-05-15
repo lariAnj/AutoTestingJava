@@ -5,8 +5,7 @@ import org.vk.utilityClasses.LoadableComponent;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.clickable;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 
@@ -39,7 +38,7 @@ public class SharedAlbumsTab implements LoadableComponent {
     private String albumName = "N-album";
 
     public boolean isLoaded() throws Error {
-        if (!($(SHARED_ALBUMS_BLOCK).is(visible, Duration.ofSeconds(10)))) {
+        if (!($(SHARED_ALBUMS_BLOCK).is(visible, Duration.ofSeconds(10)) && $(PORTLET_NAME_TITLE).has(exactText(sharedAlbumsSectionHeader), Duration.ofSeconds(10)))) {
             throw new Error("SharedAlbumsTab page wasn't loaded properly");
         }
         else {

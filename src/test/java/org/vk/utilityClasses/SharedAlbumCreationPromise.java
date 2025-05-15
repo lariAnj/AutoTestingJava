@@ -14,8 +14,6 @@ public class SharedAlbumCreationPromise {
     public final By CONCRETE_ALBUMS_RAW = By.xpath(".//*[contains(@id, 'PhotoVitrineAlbumsBlock')]");
 
     public SharedAlbumsCreationPage goToSharedAlbumCreationPage() {
-        System.out.println("public SharedAlbumsCreationPage goToSharedAlbumCreationPage()");
-        sleep(3000);
         if ($(CREATION_BLOCK).is(visible)) {
             return new SharedAlbumsCreationPage();
         }
@@ -23,7 +21,6 @@ public class SharedAlbumCreationPromise {
     }
 
     public ExistingSharedAlbumsPage goToExistingSharedAlbumsPage() {
-        System.out.println("public ExistingSharedAlbumsPage goToExistingSharedAlbumsPage()");
         if ($(CONCRETE_ALBUMS_RAW).is(visible)) {
             return new ExistingSharedAlbumsPage();
         }
